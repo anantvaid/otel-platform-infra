@@ -1,0 +1,25 @@
+# Local Terraform directories
+.terraform/
+.terraform.lock.hcl
+
+# Terraform state files
+*.tfstate
+*.tfstate.*
+# backup files
+*~
+# crash log files
+crash.log
+
+# secrets and variable files (if not using other secure storage)
+# You may want to ignore all .tfvars files or only specific ones.
+# Consider using a different approach for secrets management like Terraform Cloud, Vault, or environment variables.
+*.tfvars
+*.tfvars.json
+
+# Optional: plan files
+# plan files can contain sensitive information and are not necessary to commit to source control.
+# *.tfplan
+# *.tfplan.binary
+
+# Optional: TF CLI configuration files
+# cli.config
