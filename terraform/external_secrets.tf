@@ -6,9 +6,13 @@ resource "helm_release" "external_secrets" {
   namespace        = "external-secrets"
   create_namespace = true
 
-  set = [
-    {
-    name  = "serviceAccount.annotations.iam\\.gke\\.io/gcp-service-account"
-    value = google_service_account.eso_gsa.email
-  }]
+  values = [
+    yamlencode({
+      serviceAccount = {
+        annotations = {
+          "iam.gke.io/gcp-service-account" = google_service_account.eso_gsa.email
+        }
+      }
+    })
+  ]
 }

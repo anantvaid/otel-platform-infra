@@ -17,7 +17,3 @@ resource "google_service_account_iam_binding" "eso_workload_identity" {
     "serviceAccount:${var.project_id}.svc.id.goog[external-secrets/external-secrets]"
   ]
 }
-
-output "eso_gsa_email" {
-  value = google_service_account.eso_gsa.email
-}
