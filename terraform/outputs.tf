@@ -12,3 +12,11 @@ output "region" {
   description = "The region where the resources are deployed"
   value       = var.region
 }
+
+output "eso_gsa_email" {
+  value = google_service_account.eso_gsa.email
+}
+
+output "gateway_static_ip" {
+  value = google_compute_global_address.gateway_ip.address
+}

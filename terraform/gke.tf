@@ -5,6 +5,10 @@ resource "google_container_cluster" "primary" {
     networking_mode = "VPC_NATIVE"
     network         = google_compute_network.vpc_network.id
     subnetwork      = google_compute_subnetwork.vpc_subnet.id
+
+    gateway_api_config {
+        channel = "CHANNEL_STANDARD"
+    }
     
     deletion_protection = false
 
@@ -12,8 +16,8 @@ resource "google_container_cluster" "primary" {
     initial_node_count       = 1
 
     node_config {
-        disk_size_gb = 20  
         disk_type    = "pd-balanced"
+        spot = true
     }
     
     ip_allocation_policy {
@@ -23,6 +27,10 @@ resource "google_container_cluster" "primary" {
 
     workload_identity_config {
       workload_pool = "${var.project_id}.svc.id.goog"
+    }
+
+    lifecycle {
+      ignore_changes = [ node_config ]
     }
 }
 
