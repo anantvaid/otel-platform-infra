@@ -1,6 +1,6 @@
 loki:
   deploymentMode: SingleBinary
-  
+
   loki:
     auth_enabled: false
     commonConfig:
@@ -16,14 +16,31 @@ loki:
           index:
             prefix: index_
             period: 24h
-  
-  singleBinary:
-    replicas: 1
-  
-  # Disable other components
+    
+    storage_config:
+      aws:
+        bucketnames: "void"
+        endpoint: "void"
+        region: "void"
+        access_key_id: "void"
+        secret_access_key: "void"
+        s3forcepathstyle: true
+
   write:
     replicas: 0
+    persistence:
+      enabled: false
   read:
     replicas: 0
+    persistence:
+      enabled: false
   backend:
     replicas: 0
+    persistence:
+      enabled: false
+
+  singleBinary:
+    replicas: 1
+    persistence:
+      enabled: true
+      size: 10Gi
