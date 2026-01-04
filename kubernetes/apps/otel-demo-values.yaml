@@ -1,0 +1,16 @@
+prometheus:
+  enabled: false
+grafana:
+  enabled: false
+jaeger:
+  enabled: false
+opensearch:
+  enabled: false
+
+opentelemetry-collector:
+  config:
+    exporters:
+      otlp:
+        endpoint: "observability-stack-tempo.monitoring.svc.cluster.local:4317"
+        tls:
+          insecure: true
