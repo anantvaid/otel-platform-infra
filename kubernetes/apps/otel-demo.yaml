@@ -22,12 +22,12 @@ spec:
             enabled: false
           
           opentelemetry-collector:
-          config:
-            exporters:
-              otlp:
-                endpoint: "observability-stack-tempo.monitoring.svc.cluster.local:4317" 
-                tls:
-                  insecure: true
+            config:
+              exporters:
+                otlp:
+                  endpoint: "observability-stack-tempo.monitoring.svc.cluster.local:4317" 
+                  tls:
+                    insecure: true
 
   destination:
     server: https://kubernetes.default.svc
