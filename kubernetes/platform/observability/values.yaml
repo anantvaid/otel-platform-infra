@@ -44,3 +44,15 @@ loki:
     persistence:
       enabled: true
       size: 10Gi
+
+grafana:
+  additionalDataSources:
+    - name: Tempo
+      type: tempo
+      uid: tempo
+      access: proxy
+      url: http://observability-stack-tempo.monitoring.svc.cluster.local:3100
+      jsonData:
+        httpMethod: GET
+        serviceMap:
+          datasourceUid: prometheus
