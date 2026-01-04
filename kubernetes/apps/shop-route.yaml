@@ -1,0 +1,19 @@
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: shop-route
+  namespace: otel-demo
+spec:
+  parentRefs:
+  - name: external-gateway
+    namespace: default
+  hostnames:
+  - "shop.techtalkswithanant.online"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: otel-demo-frontend-proxy
+      port: 8080
