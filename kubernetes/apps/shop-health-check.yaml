@@ -1,0 +1,21 @@
+apiVersion: networking.gke.io/v1
+kind: HealthCheckPolicy
+metadata:
+  name: shop-health-check
+  namespace: otel-demo
+spec:
+  default:
+    checkIntervalSec: 10
+    timeoutSec: 5
+    healthyThreshold: 1
+    unhealthyThreshold: 2
+    logConfig:
+      enabled: true
+    config:
+      type: TCP
+      tcpHealthCheck:
+        port: 8080
+  targetRef:
+    group: ""
+    kind: Service
+    name: frontend-proxy

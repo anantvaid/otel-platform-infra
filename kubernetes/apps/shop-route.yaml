@@ -15,5 +15,5 @@ spec:
         type: PathPrefix
         value: /
     backendRefs:
-    - name: otel-demo-frontend-proxy
+    - name: frontend-proxy 
       port: 8080
