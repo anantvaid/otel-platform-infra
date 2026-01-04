@@ -46,6 +46,12 @@ loki:
       size: 10Gi
 
 grafana:
+
+  sidecar:
+    datasources:
+      enabled: true
+      defaultDatasourceEnabled: true
+
   additionalDataSources:
     - name: Tempo
       type: tempo
