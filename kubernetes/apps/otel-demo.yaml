@@ -10,7 +10,7 @@ spec:
   source:
     chart: opentelemetry-demo
     repoURL: https://open-telemetry.github.io/opentelemetry-helm-charts
-    targetRevision: "0.142.1"
+    targetRevision: "0.39.0"
     helm:
       values: |
         default:
