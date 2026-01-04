@@ -1,0 +1,21 @@
+apiVersion: networking.gke.io/v1
+kind: HealthCheckPolicy
+metadata:
+  name: grafana-health-check
+  namespace: monitoring
+spec:
+  default:
+    checkIntervalSec: 10
+    timeoutSec: 5
+    healthyThreshold: 1
+    unhealthyThreshold: 2
+    logConfig:
+      enabled: true
+    config:
+      type: TCP
+      tcpHealthCheck:
+        port: 3000
+  targetRef:
+    group: ""
+    kind: Service
+    name: observability-stack-grafana
