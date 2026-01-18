@@ -19,7 +19,8 @@ argocd-image-updater:
     scripts:
       gcp-auth.sh: |
         #!/bin/sh
-        wget -q -O - --header "Metadata-Flavor: Google" \
+        TOKEN=$(wget -q -O - --header "Metadata-Flavor: Google" \
           http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token \
           | grep -o '"access_token":"[^"]*"' \
-          | cut -d'"' -f4
+          | cut -d'"' -f4)
+        echo "oauth2accesstoken:$TOKEN"

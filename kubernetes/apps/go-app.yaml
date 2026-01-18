@@ -7,7 +7,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
   annotations:
     argocd-image-updater.argoproj.io/image-list: go-app=us-central1-docker.pkg.dev/sre-portfolio-platform/my-artifact-repo/go-app
-    argocd-image-updater.argoproj.io/go-app.update-strategy: latest
+    argocd-image-updater.argoproj.io/go-app.update-strategy: newest-build
     argocd-image-updater.argoproj.io/write-back-method: git
 spec:
   project: default
