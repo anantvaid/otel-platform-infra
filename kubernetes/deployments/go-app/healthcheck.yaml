@@ -1,0 +1,20 @@
+apiVersion: networking.gke.io/v1
+kind: HealthCheckPolicy
+metadata:
+  name: go-app-health-check
+  namespace: go-app
+spec:
+  default:
+    checkIntervalSec: 10
+    timeoutSec: 5
+    healthyThreshold: 1
+    unhealthyThreshold: 2
+    config:
+      type: HTTP
+      httpHealthCheck:
+        port: 8080        
+        requestPath: /    
+  targetRef:
+    group: ""
+    kind: Service
+    name: go-app
