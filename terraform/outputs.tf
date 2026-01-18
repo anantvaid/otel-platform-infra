@@ -29,3 +29,7 @@ output "wi_provider_name" {
 output "github_sa_email" {
   value = google_service_account.github_actions.email
 }
+
+output "image_updater_email" {
+  value = google_service_account.image_updater.email
+}
