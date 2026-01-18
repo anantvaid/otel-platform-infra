@@ -20,3 +20,8 @@ variable "cluster_name" {
     type = string
     default     = "sre-portfolio-cluster"
 }
+
+variable "github_repo_name" {
+  description = "The GitHub repo path (e.g. 'username/repo-name')"
+  type        = string
+}

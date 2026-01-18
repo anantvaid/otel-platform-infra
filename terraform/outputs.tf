@@ -20,3 +20,12 @@ output "eso_gsa_email" {
 output "gateway_static_ip" {
   value = google_compute_global_address.gateway_ip.address
 }
+
+output "wi_provider_name" {
+  description = "The Workload Identity Provider resource name"
+  value       = google_iam_workload_identity_pool_provider.github_provider.name
+}
+
+output "github_sa_email" {
+  value = google_service_account.github_actions.email
+}
