@@ -6,9 +6,9 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   annotations:
-    # We will enable these annotations in the NEXT step for auto-updates
-    # argocd-image-updater.argoproj.io/image-list: go-app=us-central1-docker.pkg.dev/sre-portfolio-platform/my-artifact-repo/go-app
-    # argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/image-list: go-app=us-central1-docker.pkg.dev/sre-portfolio-platform/my-artifact-repo/go-app
+    argocd-image-updater.argoproj.io/go-app.update-strategy: latest
+    argocd-image-updater.argoproj.io/write-back-method: git
 spec:
   project: default
   source:
