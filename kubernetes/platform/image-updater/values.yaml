@@ -1,4 +1,7 @@
 argocd-image-updater:
+  metrics:
+    enabled: false
+
   serviceAccount:
     create: true
     name: "argocd-image-updater"
