@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# List all your existing manifests here
+resources:
+  - deployment.yaml
+  - service.yaml
+  - route.yaml
+  - healthcheck.yaml
+
+# This is the "Hook" for the Image Updater
+images:
+  - name: us-central1-docker.pkg.dev/sre-portfolio-platform/my-artifact-repo/go-app
+    newTag: latest
