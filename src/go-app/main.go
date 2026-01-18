@@ -22,7 +22,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		Message:   "Hello from the Go Application!",
 		Timestamp: time.Now(),
 		Hostname:  hostname,
-		Version:   "v1.0.0",
+		Version:   "v1.1.0",
 	}
 
 	log.Printf("Received request from %s", r.RemoteAddr)
