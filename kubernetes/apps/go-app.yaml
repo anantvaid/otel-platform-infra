@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: go-app
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    # We will enable these annotations in the NEXT step for auto-updates
+    # argocd-image-updater.argoproj.io/image-list: go-app=us-central1-docker.pkg.dev/sre-portfolio-platform/my-artifact-repo/go-app
+    # argocd-image-updater.argoproj.io/write-back-method: git
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/anantvaid/otel-platform-infra.git
+    targetRevision: main
+    path: kubernetes/deployments/go-app # Pointing to the manifests we just made
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: go-app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

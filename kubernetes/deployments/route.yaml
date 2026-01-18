@@ -1,0 +1,19 @@
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: go-app-route
+  namespace: go-app
+spec:
+  parentRefs:
+  - name: external-gateway
+    namespace: default
+  hostnames:
+  - "api.techtalkswithanant.online"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: go-app
+      port: 80
