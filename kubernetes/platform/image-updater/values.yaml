@@ -1,22 +1,23 @@
-serviceAccount:
-  create: true
-  name: "argocd-image-updater"
-  annotations:
-    iam.gke.io/gcp-service-account: "image-updater-sa@sre-portfolio-platform.iam.gserviceaccount.com"
+argocd-image-updater:
+  serviceAccount:
+    create: true
+    name: "argocd-image-updater"
+    annotations:
+      iam.gke.io/gcp-service-account: "image-updater-sa@sre-portfolio-platform.iam.gserviceaccount.com"
 
-config:
-  registries: |
-    - name: us-central1-docker.pkg.dev
-      api_url: https://us-central1-docker.pkg.dev
-      prefix: us-central1-docker.pkg.dev
-      ping: yes
-      credentials: ext:/scripts/gcp-auth.sh
-      credsexpire: 55m
+  config:
+    registries: |
+      - name: us-central1-docker.pkg.dev
+        api_url: https://us-central1-docker.pkg.dev
+        prefix: us-central1-docker.pkg.dev
+        ping: yes
+        credentials: ext:/scripts/gcp-auth.sh
+        credsexpire: 55m
       
-authScripts:
-  enabled: true
-  scripts:
-    gcp-auth.sh: |
-      #!/bin/sh
-      source /app/secrets/gcp-auth/token
-      echo $TOKEN
+  authScripts:
+    enabled: true
+    scripts:
+      gcp-auth.sh: |
+        #!/bin/sh
+        source /app/secrets/gcp-auth/token
+        echo $TOKEN
