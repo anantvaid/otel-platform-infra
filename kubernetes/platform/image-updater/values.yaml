@@ -11,7 +11,7 @@ argocd-image-updater:
         api_url: https://us-central1-docker.pkg.dev
         prefix: us-central1-docker.pkg.dev
         ping: yes
-        credentials: ext:/app/config/gcp-auth.sh
+        credentials: ext:/scripts/gcp-auth.sh
         credsexpire: 55m
       
   authScripts:
