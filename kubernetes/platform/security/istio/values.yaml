@@ -1,0 +1,21 @@
+base:
+  global:
+    istioNamespace: istio-system
+
+istiod:
+  global:
+    istioNamespace: istio-system
+  pilot:
+    env:
+      PILOT_ENABLE_AMBIENT: "true"
+
+cni:
+  global:
+    istioNamespace: istio-system
+  profile: ambient
+  ambient:
+    enabled: true
+
+ztunnel:
+  global:
+    istioNamespace: istio-system
