@@ -15,7 +15,9 @@ cni:
   profile: ambient
   ambient:
     enabled: true
+  priorityClassName: ""
 
 ztunnel:
   global:
     istioNamespace: istio-system
+  priorityClassName: ""
