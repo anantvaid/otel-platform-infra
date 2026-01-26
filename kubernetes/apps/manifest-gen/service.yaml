@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: manifest-gen
+  namespace: manifest-gen
+spec:
+  selector:
+    app: manifest-gen
+  ports:
+  - port: 80
+    targetPort: 8080
