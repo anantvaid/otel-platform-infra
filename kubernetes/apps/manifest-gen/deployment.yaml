@@ -13,6 +13,9 @@ spec:
       labels:
         app: manifest-gen
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
       containers:
       - name: manifest-gen
         image: anantvaid4/manifest-generator-api 
