@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: manifest-gen
+  namespace: manifest-gen
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: manifest-gen
+  workloadRef:
+    kind: Deployment
+  strategy:
+    canary:
+      trafficRouting:
+        istio:
+          virtualService: 
+            name: manifest-gen-vs
+            routes:
+            - primary
+          destinationRule:
+            name: manifest-gen-dr
+            canarySubsets:
+            - canary
+            - stable
+      steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 50
+      - pause: {duration: 30s}
+      - setWeight: 100
+  template:
+    metadata:
+      labels:
+        app: manifest-gen
+        istio.io/dataplane-mode: ambient
+    spec:
+      securityContext:
+        runAsNonRoot: true
+      containers:
+      - name: manifest-gen
+        image: anantvaid4/manifest-generator-api:latest 
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "64Mi"

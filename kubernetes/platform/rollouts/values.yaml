@@ -1,0 +1,10 @@
+argo-rollouts:
+  dashboard:
+    enabled: true
+    service:
+      type: ClusterIP
+  controller:
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true

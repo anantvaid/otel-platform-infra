@@ -1,0 +1,64 @@
+# The Stable Service (Live Traffic)
+apiVersion: v1
+kind: Service
+metadata:
+  name: manifest-gen-stable
+  namespace: manifest-gen
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    name: http
+  selector:
+    app: manifest-gen
+---
+# The Canary Service (Preview Traffic)
+apiVersion: v1
+kind: Service
+metadata:
+  name: manifest-gen-canary
+  namespace: manifest-gen
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    name: http
+  selector:
+    app: manifest-gen
+---
+# DestinationRule (Defines the subsets)
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: manifest-gen-dr
+  namespace: manifest-gen
+spec:
+  host: manifest-gen-stable
+  subsets:
+  - name: stable
+    labels:
+      app: manifest-gen
+  - name: canary
+    labels:
+      app: manifest-gen
+---
+# VirtualService (The Traffic Splitter)
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: manifest-gen-vs
+  namespace: manifest-gen
+spec:
+  hosts:
+  - manifest-gen-stable
+  http:
+  - name: primary
+    route:
+    - destination:
+        host: manifest-gen-stable
+        subset: stable
+      weight: 100
+    - destination:
+        host: manifest-gen-stable
+        subset: canary
+      weight: 0
