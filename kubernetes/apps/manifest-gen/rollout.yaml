@@ -18,9 +18,8 @@ spec:
             - primary
           destinationRule:
             name: manifest-gen-dr
-            canarySubsets:
-            - canary
-            - stable
+            canarySubsetName: canary
+            stableSubsetName: stable
       steps:
       - setWeight: 20
       - pause: {}
