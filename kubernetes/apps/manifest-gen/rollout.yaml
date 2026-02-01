@@ -8,8 +8,6 @@ spec:
   selector:
     matchLabels:
       app: manifest-gen
-  workloadRef:
-    kind: Deployment
   strategy:
     canary:
       trafficRouting:
