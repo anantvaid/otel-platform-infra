@@ -1,0 +1,17 @@
+cost-analyzer:
+  kubecostToken: "public-demo-token-sre-portfolio"
+  
+  global:
+    prometheus:
+      enabled: false
+      fqdn: http://observability-stack-kube-p-prometheus.monitoring.svc.cluster.local:9090
+    grafana:
+      enabled: false
+      proxy: false
+
+  ingress:
+    enabled: true
+    hosts:
+      - cost.techtalkswithanant.online
+    paths: ["/"]
+    pathType: ImplementationSpecific
