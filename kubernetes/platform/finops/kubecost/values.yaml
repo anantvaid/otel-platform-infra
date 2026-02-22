@@ -10,8 +10,4 @@ cost-analyzer:
       proxy: false
 
   ingress:
-    enabled: true
-    hosts:
-      - cost.techtalkswithanant.online
-    paths: ["/"]
-    pathType: ImplementationSpecific
+    enabled: false
