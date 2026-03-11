@@ -1,0 +1,10 @@
+chaos-mesh:
+  dashboard:
+    create: true
+    securityMode: false
+  
+  bpfki:
+    create: true
+  
+  controllerManager:
+    targetNamespace: "manifest-gen"
