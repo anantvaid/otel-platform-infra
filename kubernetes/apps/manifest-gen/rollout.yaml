@@ -10,16 +10,16 @@ spec:
       app: manifest-gen
   strategy:
     canary:
-      trafficRouting:
-        istio:
-          virtualService: 
-            name: manifest-gen-vs
-            routes:
-            - primary
-          destinationRule:
-            name: manifest-gen-dr
-            canarySubsetName: canary
-            stableSubsetName: stable
+      #trafficRouting:
+      #  istio:
+      #    virtualService: 
+      #      name: manifest-gen-vs
+      #      routes:
+      #      - primary
+      #    destinationRule:
+      #      name: manifest-gen-dr
+      #      canarySubsetName: canary
+      #      stableSubsetName: stable
       steps:
       - setWeight: 20
       - pause: {}
