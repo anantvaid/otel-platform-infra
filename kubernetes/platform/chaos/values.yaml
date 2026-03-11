@@ -8,3 +8,7 @@ chaos-mesh:
   
   controllerManager:
     targetNamespace: "manifest-gen"
+
+  chaosDaemon:
+    runtime: containerd
+    socketPath: /run/containerd/containerd.sock
