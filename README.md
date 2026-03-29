@@ -11,7 +11,7 @@
 ![Tempo](https://img.shields.io/badge/Tracing-Tempo-yellow?style=flat-square&logo=grafana)
 ![Prometheus](https://img.shields.io/badge/Metrics-Prometheus-red?style=flat-square&logo=prometheus)
 
-![Status](https://img.shields.io/badge/Status-Active_Development-orange?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Completed-success?style=flat-square)
 
 **A production-grade Internal Developer Platform (IDP) built on GKE, designed under strict real-world constraints: cost optimization, keyless identity, GitOps workflows, and VPC-native networking.**
 
@@ -19,14 +19,16 @@ This repository documents the evolution of a real-world SRE platform — startin
 
 ---
 
-## Platform Capabilities (As of Phase 2)
+## Architecture & Platform Capabilities (Phases 1-8 Complete)
 
-- **Keyless Workload Identity** using GCP Workload Identity Federation  
-- **GitOps-driven deployments** via ArgoCD (App-of-Apps pattern)  
-- **Modern ingress** using GKE Gateway API with managed load balancers  
-- **Automated TLS** using Cert-Manager and Let’s Encrypt  
-- **Secure secret management** with Google Secret Manager + External Secrets  
-- **Cost-constrained by design**, running on Spot nodes  
+* **Infrastructure & Compute:** GKE running on preemptible/Spot Instances, provisioned via Terraform.
+* **Security & Identity:** Keyless Workload Identity Federation (GCP), automated TLS via Cert-Manager (Let's Encrypt), and policy enforcement via **Kyverno** (blocking root containers/privilege escalation).
+* **Modern Networking:** Native GKE Gateway API (`HTTPRoute`) utilizing managed Google Cloud Load Balancers.
+* **GitOps Delivery:** 100% declarative state managed by **ArgoCD** using the App-of-Apps pattern.
+* **Progressive Deployment:** Canary release automation managed by **Argo Rollouts**.
+* **Observability (LGTM Stack):** Full-stack monitoring featuring Prometheus (Metrics), Loki (Logs), Tempo (Traces), and Grafana (Dashboards).
+* **FinOps & Cost Visibility:** Real-time workload allocation and cluster cost monitoring via **Kubecost**.
+* **Reliability & Chaos Engineering:** Continuous resilience testing and automated failure injection via **Chaos Mesh**.
 
 ---
 
@@ -170,56 +172,133 @@ kubectl get secret argocd-initial-admin-secret \
   -o jsonpath='{.data.password}' | base64 -d
 ```
 
+### 8. Initialize Root App (App of Apps)
+
+```bash
+kubectl apply -f kubernetes/bootstrap/root-app.yaml
+```
+
 ---
 
 ## Repository Structure
 
 ```text
 .
-├── terraform/                  # Infrastructure & identity bootstrap
-│   ├── gke.tf                  # GKE cluster and node pools
-│   ├── vpc.tf                  # VPC & subnet definitions
-│   ├── iam.tf                  # Service accounts & IAM bindings
-│   ├── argocd.tf               # ArgoCD installation
-│   ├── cert-manager.tf         # Cert-Manager installation
-│   ├── external_secrets.tf     # External Secrets installation
-│   ├── providers.tf
-│   ├── variables.tf
-│   └── outputs.tf
-│
-├── kubernetes/                 # GitOps-managed manifests
-│   ├── bootstrap/              # ArgoCD App-of-Apps bootstrap
-│   │   ├── root-app.yaml
-│   │   ├── apps.yaml
-│   │   └── observability.yaml
-│   │
-│   ├── platform/               # Platform-level components
-│   │   ├── gateway-api/         # Gateway, routes & health checks
-│   │   ├── cert-management/     # ClusterIssuer & Certificates
-│   │   ├── external-secrets/    # SecretStore & ExternalSecrets
-│   │   └── observability/       # Grafana & observability routing
-│   │
-│   └── apps/                   # Application workloads
-│       ├── otel-demo.yaml
-│       ├── otel-demo-values.yaml
-│       ├── shop-route.yaml
-│       └── shop-health-check.yaml
-│
-└── README.md
+├── kubernetes
+│   ├── apps
+│   │   ├── go-app.yaml
+│   │   ├── manifest-gen
+│   │   │   ├── deployment.yaml.disabled
+│   │   │   ├── namespace.yaml
+│   │   │   ├── networking.yaml
+│   │   │   ├── rollout.yaml
+│   │   │   └── service.yaml.disabled
+│   │   ├── otel-demo-values.yaml
+│   │   ├── otel-demo.yaml
+│   │   ├── shop-health-check.yaml
+│   │   └── shop-route.yaml
+│   ├── bootstrap
+│   │   ├── apps.yaml
+│   │   ├── chaos.yaml
+│   │   ├── finops.yaml
+│   │   ├── manifest-gen.yaml
+│   │   ├── observability.yaml
+│   │   ├── rollouts.yaml
+│   │   ├── root-app.yaml
+│   │   ├── security.yaml
+│   │   └── updater.yaml
+│   ├── deployments
+│   │   └── go-app
+│   │       ├── deployment.yaml
+│   │       ├── healthcheck.yaml
+│   │       ├── kustomization.yaml
+│   │       ├── namespace.yaml
+│   │       ├── route.yaml
+│   │       └── service.yaml
+│   └── platform
+│       ├── cert-management
+│       │   ├── certificate.yaml
+│       │   └── cluster-issuer.yaml
+│       ├── chaos
+│       │   ├── Chart.yaml
+│       │   └── values.yaml
+│       ├── external-secrets
+│       │   ├── cluster-secret-store.yaml
+│       │   ├── db-secret.yaml
+│       │   └── github-pat.yaml
+│       ├── finops
+│       │   └── kubecost
+│       │       ├── Chart.yaml
+│       │       ├── httproute.yaml
+│       │       └── values.yaml
+│       ├── gateway-api
+│       │   ├── argocd-health-policy.yaml
+│       │   ├── argocd-route.yaml
+│       │   └── gateway.yaml
+│       ├── image-updater
+│       │   ├── Chart.yaml
+│       │   └── values.yaml
+│       ├── observability
+│       │   ├── Chart.yaml
+│       │   ├── templates
+│       │   │   ├── grafana-health-check.yaml
+│       │   │   └── grafana-route.yaml
+│       │   └── values.yaml
+│       ├── rollouts
+│       │   ├── Chart.yaml
+│       │   └── values.yaml
+│       └── security
+│           ├── istio
+│           │   ├── Chart.yaml
+│           │   └── values.yaml
+│           ├── istio-quota.yaml
+│           ├── istio.yaml
+│           ├── kyverno
+│           │   ├── Chart.yaml
+│           │   ├── disallow-root.yaml
+│           │   └── values.yaml
+│           └── kyverno.yaml
+├── README.md
+├── src
+│   └── go-app
+│       ├── Dockerfile
+│       ├── go.mod
+│       └── main.go
+└── terraform
+    ├── argocd.tf
+    ├── cert-manager.tf
+    ├── external_secrets.tf
+    ├── github-oidc.tf
+    ├── gke.tf
+    ├── iam.tf
+    ├── outputs.tf
+    ├── providers.tf
+    ├── registry.tf
+    ├── terraform.tfstate
+    ├── terraform.tfstate.1769454707.backup
+    ├── terraform.tfstate.1769454708.backup
+    ├── terraform.tfstate.1769972678.backup
+    ├── terraform.tfstate.backup
+    ├── terraform.tfvars
+    ├── tf-key.json
+    ├── variables.tf
+    └── vpc.tf
 ```
 
 ---
 
 ## Roadmap
 
-- [x] GKE infrastructure (Spot nodes, VPC-native)
-- [x] Keyless identity with Workload Identity
+- [x] GKE infrastructure (Spot nodes, VPC-native) via Terraform
+- [x] Keyless identity (Workload Identity) & Gateway API setup
 - [x] GitOps bootstrap with ArgoCD
 - [x] Gateway API + TLS bootstrapping
 - [x] LGTM observability stack
-- [ ] SLOs & alerting
-- [ ] Service mesh (Istio)
-- [ ] Chaos engineering
+- [x] Service mesh (Istio)
+- [x] Security & Governance (Kyverno policy enforcement)
+- [x] Progressive Deployment (Argo Rollouts for Canary releases)
+- [x] FinOps (Kubecost implementation)
+- [x] Chaos engineering (Chaos Mesh resilience testing)
 
 ---
 
@@ -230,6 +309,18 @@ I am documenting the entire build process, including the architectural decisions
 Part 1: [Designing a Cost-Constrained, Production-Grade GKE Cluster](https://techtalkswithanant.hashnode.dev/designing-a-cost-constrained-production-grade-gke-cluster-with-terraform)
 
 Part 2: [Beyond Ingress: Building a "Keyless" Platform with GKE Gateway API](https://techtalkswithanant.hashnode.dev/beyond-ingress-building-a-keyless-platform-with-gke-gateway-api)
+
+Part 3: [The LGTM Stack: From Blind Containers to Full Visibility](https://techtalkswithanant.hashnode.dev/the-lgtm-stack-from-blind-containers-to-full-visibility)
+
+Part 4: [The CI/CD Factory: Zero-Touch GKE Deployments with ArgoCD & GitHub Actions](https://techtalkswithanant.hashnode.dev/zero-touch-gke-deployments)
+
+Part 5: [Zero Trust Security in Kubernetes: Kyverno & Istio Ambient](https://techtalkswithanant.hashnode.dev/zero-trust-security-in-kubernetes)
+
+Part 6: [Progressive Delivery in Kubernetes: Argo Rollouts & Istio](https://techtalkswithanant.hashnode.dev/progressive-delivery-in-kubernetes)
+
+Part 7: [FinOps in Kubernetes - Taming the Cloud Bill with Kubecost](https://techtalkswithanant.hashnode.dev/kubernetes-finops-cost-optimization-kubecost)
+
+Part 8: [Chaos Engineering - Proving Resilience in Kubernetes Platform](https://techtalkswithanant.hashnode.dev/chaos-engineering-proving-resilience-in-kubernetes-platform)
 
 ---
 
